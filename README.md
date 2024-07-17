@@ -14,6 +14,8 @@ This script automates the setup of a customized terminal environment with Oh My 
 
 1. Download the script:
 
+   git clone https://github.com/SamVivan1/OhMyZsh_Setup.git
+
 2. Make the script executable:
 
    chmod +x Setup_Terminal.sh
@@ -46,6 +48,8 @@ Skrip ini mengotomatisasi pengaturan lingkungan terminal yang disesuaikan dengan
 ## Penggunaan
 
 1. Unduh skrip:
+
+   git clone https://github.com/SamVivan1/OhMyZsh_Setup.git
 
 2. Buat skrip dapat dieksekusi:
 
