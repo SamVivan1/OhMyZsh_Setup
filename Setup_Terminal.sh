@@ -23,8 +23,8 @@ echo -e "\e[32mUpdate sistem selesai!\e[0m\n"
 # Install OhMyZsh
 echo -e "\e[32mMenginstall OhMyZsh...\e[0m"
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-else
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+else 
     echo "Oh My Zsh sudah terinstall."
 fi
 
