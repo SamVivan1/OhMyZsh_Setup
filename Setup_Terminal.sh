@@ -1,3 +1,9 @@
+# This script updates the package list, upgrades installed packages, removes unused packages, and installs Oh My Zsh, zsh-syntax-highlighting, zsh-autosuggestions, and Powerlevel10k theme with the MesloLGS NF font.
+#
+# It first updates the package list, upgrades installed packages, and removes unused packages.
+# Then it installs Oh My Zsh, zsh-syntax-highlighting, zsh-autosuggestions, and Powerlevel10k theme.
+# Finally, it installs the MesloLGS NF font and configures Oh My Zsh to use the Powerlevel10k theme and the installed plugins.
+
 #!/bin/bash
 
 # Memperbarui daftar paket
