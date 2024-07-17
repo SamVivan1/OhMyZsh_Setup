@@ -24,7 +24,9 @@ This script automates the setup of a customized terminal environment with Oh My 
 
    ./Setup_Terminal.sh
 
-4. After the script finishes, restart your terminal or run `source ~/.zshrc` to apply the changes.
+4. After entering Oh My Zsh, type `exit` to exit Oh My Zsh and return to the installation.
+
+5. After the script finishes, restart your terminal or run `source ~/.zshrc` to apply the changes.
 
 ## Note
 
@@ -59,7 +61,9 @@ Skrip ini mengotomatisasi pengaturan lingkungan terminal yang disesuaikan dengan
 
    ./Setup_Terminal.sh
 
-4. Setelah skrip selesai, restart terminal Anda atau jalankan `source ~/.zshrc` untuk menerapkan perubahan.
+4. Setelah masuk ke dalam Oh My Zsh, ketik `exit` untuk keluar dari Oh My Zsh dan kembali ke instalasi.
+
+5. Setelah skrip selesai, restart terminal Anda atau jalankan `source ~/.zshrc` untuk menerapkan perubahan.
 
 ## Catatan
 

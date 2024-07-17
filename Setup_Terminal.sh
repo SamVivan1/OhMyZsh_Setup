@@ -20,8 +20,35 @@ sudo apt autoremove -y > /dev/null 2>&1
 
 echo -e "\e[32mUpdate sistem selesai!\e[0m\n"
 
+# Install git
+echo -e "\e[32mInstalling git...\e[0m"
+if ! command -v git &> /dev/null
+then
+    sudo apt install git -y > /dev/null 2>&1
+else
+    echo "git sudah terinstall."
+fi
+
+# Install curl
+echo -e "\e[32mInstalling curl...\e[0m"
+if ! command -v curl &> /dev/null
+then
+    sudo apt install curl -y > /dev/null 2>&1
+else
+    echo "curl sudah terinstall."
+fi
+
+# Install zsh
+echo -e "\e[32mInstalling zsh...\e[0m"
+if ! command -v zsh &> /dev/null
+then
+    sudo apt install zsh -y > /dev/null 2>&1
+else
+    echo "zsh sudah terinstall."
+fi
+
 # Install OhMyZsh
-echo -e "\e[32mMenginstall OhMyZsh...\e[0m"
+echo -e "\e[32mInstalling OhMyZsh...\e[0m"
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 else 
@@ -29,7 +56,7 @@ else
 fi
 
 # Install zsh-syntax-highlighting
-echo -e "\e[32mMenginstall zsh-syntax-highlighting...\e[0m"
+echo -e "\e[32mInstalling zsh-syntax-highlighting...\e[0m"
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" ]; then
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 else
@@ -37,7 +64,7 @@ else
 fi
 
 # Install zsh-autosuggestions
-echo -e "\e[32mMenginstall zsh-autosuggestions...\e[0m"
+echo -e "\e[32mInstalling zsh-autosuggestions...\e[0m"
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 else
@@ -45,7 +72,7 @@ else
 fi
 
 # Install Powerlevel10k
-echo -e "\e[32mMenginstall Powerlevel10k...\e[0m"
+echo -e "\e[32mInstalling Powerlevel10k...\e[0m"
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 else
@@ -53,7 +80,7 @@ else
 fi
 
 # Install MesloLGS NF Font
-echo -e "\e[32mMenginstall font MesloLGS NF...\e[0m"
+echo -e "\e[32mInstalling font MesloLGS NF...\e[0m"
 
 # Membuat direktori fonts jika belum ada
 mkdir -p ~/.local/share/fonts
