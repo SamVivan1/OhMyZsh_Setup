@@ -29,6 +29,15 @@ else
     echo "git sudah terinstall."
 fi
 
+# Install nala
+echo -e "\e[32mInstalling nala...\e[0m"
+if ! command -v nala &> /dev/null
+then
+    sudo apt install nala -y > /dev/null 2>&1
+else
+    echo "nala sudah terinstall."
+fi
+
 # Install curl
 echo -e "\e[32mInstalling curl...\e[0m"
 if ! command -v curl &> /dev/null
@@ -129,6 +138,7 @@ sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' ~/
 sed -i 's/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autosuggestions)/' ~/.zshrc
 
 # Menambahkan konfigurasi untuk lsd
+echo -e "\e[32mMengkonfigurasi lsd...\e[0m"
 echo "alias ls='lsd'" >> ~/.zshrc
 echo "alias l='ls -l'" >> ~/.zshrc
 echo "alias la='ls -a'" >> ~/.zshrc
@@ -136,6 +146,7 @@ echo "alias lla='ls -la'" >> ~/.zshrc
 echo "alias lt='ls --tree'" >> ~/.zshrc
 
 # Menambahkan konfigurasi untuk zoxide
+echo -e "\e[32mMengkonfigurasi Zoxide...\e[0m"
 echo 'eval "$(zoxide init zsh)"' >> ~/.zshrc
 
 # Memuat ulang konfigurasi
