@@ -79,6 +79,26 @@ else
     echo "Powerlevel10k sudah terinstall."
 fi
 
+# Install lsd
+echo -e "\e[32mInstalling lsd...\e[0m"
+if ! dpkg -s lsd >/dev/null 2>&1; then
+    sudo apt install lsd -y > /dev/null 2>&1
+    echo -e "\e[32mlsd installed successfully.\e[0m"
+else
+    echo -e "\e[33mlsd is already installed.\e[0m"
+fi
+
+# Install zoxide
+echo -e "\e[32mInstalling zoxide...\e[0m"
+if ! command -v zoxide &> /dev/null
+then
+    sudo apt install zoxide -y > /dev/null 2>&1
+    echo -e "\e[32mzoxide has been installed successfully.\e[0m"
+else
+    echo -e "\e[33mzoxide is already installed. Skipping...\e[0m"
+fi
+
+
 # Install MesloLGS NF Font
 echo -e "\e[32mInstalling font MesloLGS NF...\e[0m"
 
@@ -108,6 +128,16 @@ sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' ~/
 # Menambahkan plugin yang telah diinstal
 sed -i 's/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autosuggestions)/' ~/.zshrc
 
+# Menambahkan konfigurasi untuk lsd
+echo "alias ls='lsd'" >> ~/.zshrc
+echo "alias l='ls -l'" >> ~/.zshrc
+echo "alias la='ls -a'" >> ~/.zshrc
+echo "alias lla='ls -la'" >> ~/.zshrc
+echo "alias lt='ls --tree'" >> ~/.zshrc
+
+# Menambahkan konfigurasi untuk zoxide
+echo 'eval "$(zoxide init zsh)"' >> ~/.zshrc
+
 # Memuat ulang konfigurasi
 if [ -n "$ZSH_VERSION" ]; then
     source ~/.zshrc
@@ -116,4 +146,4 @@ else
 fi
 
 echo -e "\e[32mKonfigurasi OhMyZsh selesai!\e[0m"
-echo -e "\e[33mSilakan restart terminal atau jalankan 'source ~/.zshrc' di dalam sesi zsh untuk menerapkan perubahan.\e[0m"
+echo -e "\e[33mSilakan restart terminal atau jalankan 'source ~/.zshrc' di dalam sesi zsh untuk menerapkan perubahan, jika tidak bisa jalankan 'zsh' terlebih dahulu.\e[0m"
