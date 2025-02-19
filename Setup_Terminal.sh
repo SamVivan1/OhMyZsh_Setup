@@ -1,59 +1,96 @@
-# This script updates the package list, upgrades installed packages, removes unused packages, and installs Oh My Zsh, zsh-syntax-highlighting, zsh-autosuggestions, and Powerlevel10k theme with the MesloLGS NF font.
-#
-# It first updates the package list, upgrades installed packages, and removes unused packages.
-# Then it installs Oh My Zsh, zsh-syntax-highlighting, zsh-autosuggestions, and Powerlevel10k theme.
-# Finally, it installs the MesloLGS NF font and configures Oh My Zsh to use the Powerlevel10k theme and the installed plugins.
-
 #!/bin/bash
 
-# Memperbarui daftar paket
-echo -e "\e[32mMemperbarui daftar paket...\e[0m"
-sudo apt update > /dev/null 2>&1
+# Function to detect package manager
+get_package_manager() {
+    if command -v apt &> /dev/null; then
+        echo "apt"
+    elif command -v dnf &> /dev/null; then
+        echo "dnf"
+    elif command -v pacman &> /dev/null; then
+        echo "pacman"
+    else
+        echo "unknown"
+    fi
+}
 
-# Meningkatkan paket yang sudah terinstal
-echo -e "\e[32mMeningkatkan paket yang sudah terinstal...\e[0m"
-sudo apt upgrade -y > /dev/null 2>&1
+PKG_MANAGER=$(get_package_manager)
 
-# Menghapus paket yang tidak lagi diperlukan
-echo -e "\e[31mMenghapus paket yang tidak lagi diperlukan...\e[0m"
-sudo apt autoremove -y > /dev/null 2>&1
+# Update package list and upgrade system
+echo -e "\e[32mUpdating system packages...\e[0m"
+case $PKG_MANAGER in
+    "apt")
+        sudo apt update > /dev/null 2>&1
+        sudo apt upgrade -y > /dev/null 2>&1
+        sudo apt autoremove -y > /dev/null 2>&1
+        ;;
+    "dnf")
+        sudo dnf update -y > /dev/null 2>&1
+        sudo dnf autoremove -y > /dev/null 2>&1
+        ;;
+    "pacman")
+        sudo pacman -Syu --noconfirm > /dev/null 2>&1
+        sudo pacman -Rns $(pacman -Qtdq) --noconfirm > /dev/null 2>&1 2>/dev/null || true
+        ;;
+    *)
+        echo "Unsupported package manager"
+        exit 1
+        ;;
+esac
 
-echo -e "\e[32mUpdate sistem selesai!\e[0m\n"
+echo -e "\e[32mSystem update complete!\e[0m\n"
 
-# Install git
-echo -e "\e[32mInstalling git...\e[0m"
-if ! command -v git &> /dev/null
-then
-    sudo apt install git -y > /dev/null 2>&1
-else
-    echo "git sudah terinstall."
-fi
+# Install required packages
+install_package() {
+    local package=$1
+    echo -e "\e[32mInstalling $package...\e[0m"
+    
+    case $PKG_MANAGER in
+        "apt")
+            if ! command -v $package &> /dev/null; then
+                sudo apt install $package -y > /dev/null 2>&1
+            else
+                echo "$package already installed."
+            fi
+            ;;
+        "dnf")
+            if ! command -v $package &> /dev/null; then
+                sudo dnf install $package -y > /dev/null 2>&1
+            else
+                echo "$package already installed."
+            fi
+            ;;
+        "pacman")
+            if ! command -v $package &> /dev/null; then
+                case $package in
+                    "nala")
+                        echo "nala is not available on Arch Linux"
+                        return
+                        ;;
+                    "lsd")
+                        sudo pacman -S lsd --noconfirm > /dev/null 2>&1
+                        ;;
+                    "zoxide")
+                        sudo pacman -S zoxide --noconfirm > /dev/null 2>&1
+                        ;;
+                    *)
+                        sudo pacman -S $package --noconfirm > /dev/null 2>&1
+                        ;;
+                esac
+            else
+                echo "$package already installed."
+            fi
+            ;;
+    esac
+}
 
-# Install nala
-echo -e "\e[32mInstalling nala...\e[0m"
-if ! command -v nala &> /dev/null
-then
-    sudo apt install nala -y > /dev/null 2>&1
-else
-    echo "nala sudah terinstall."
-fi
+# Install required packages
+for package in git curl zsh lsd zoxide fastfetch btop tmux; do
+    install_package $package
+done
 
-# Install curl
-echo -e "\e[32mInstalling curl...\e[0m"
-if ! command -v curl &> /dev/null
-then
-    sudo apt install curl -y > /dev/null 2>&1
-else
-    echo "curl sudah terinstall."
-fi
-
-# Install zsh
-echo -e "\e[32mInstalling zsh...\e[0m"
-if ! command -v zsh &> /dev/null
-then
-    sudo apt install zsh -y > /dev/null 2>&1
-else
-    echo "zsh sudah terinstall."
+# Install nala only for Debian/Ubuntu
+if [ "$PKG_MANAGER" = "apt" ]; then
+    install_package nala
 fi
 
 # Install OhMyZsh
@@ -61,7 +98,7 @@ echo -e "\e[32mInstalling OhMyZsh...\e[0m"
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 else 
-    echo "Oh My Zsh sudah terinstall."
+    echo "Oh My Zsh already installed."
 fi
 
 # Install zsh-syntax-highlighting
@@ -69,7 +106,7 @@ echo -e "\e[32mInstalling zsh-syntax-highlighting...\e[0m"
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" ]; then
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 else
-    echo "zsh-syntax-highlighting sudah terinstall."
+    echo "zsh-syntax-highlighting already installed."
 fi
 
 # Install zsh-autosuggestions
@@ -77,7 +114,7 @@ echo -e "\e[32mInstalling zsh-autosuggestions...\e[0m"
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 else
-    echo "zsh-autosuggestions sudah terinstall."
+    echo "zsh-autosuggestions already installed."
 fi
 
 # Install Powerlevel10k
@@ -85,33 +122,13 @@ echo -e "\e[32mInstalling Powerlevel10k...\e[0m"
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 else
-    echo "Powerlevel10k sudah terinstall."
+    echo "Powerlevel10k already installed."
 fi
-
-# Install lsd
-echo -e "\e[32mInstalling lsd...\e[0m"
-if ! dpkg -s lsd >/dev/null 2>&1; then
-    sudo apt install lsd -y > /dev/null 2>&1
-    echo -e "\e[32mlsd installed successfully.\e[0m"
-else
-    echo -e "\e[33mlsd is already installed.\e[0m"
-fi
-
-# Install zoxide
-echo -e "\e[32mInstalling zoxide...\e[0m"
-if ! command -v zoxide &> /dev/null
-then
-    sudo apt install zoxide -y > /dev/null 2>&1
-    echo -e "\e[32mzoxide has been installed successfully.\e[0m"
-else
-    echo -e "\e[33mzoxide is already installed. Skipping...\e[0m"
-fi
-
 
 # Install MesloLGS NF Font
 echo -e "\e[32mInstalling font MesloLGS NF...\e[0m"
 
-# Membuat direktori fonts jika belum ada
+# Create fonts directory if it doesn't exist
 mkdir -p ~/.local/share/fonts
 
 # Download font files
@@ -123,38 +140,38 @@ wget -q -P ~/.local/share/fonts https://github.com/romkatv/powerlevel10k-media/r
 # Refresh font cache
 fc-cache -f -v > /dev/null 2>&1
 
-echo -e "\e[32mFont MesloLGS NF berhasil diinstall!\e[0m"
+echo -e "\e[32mMesloLGS NF font installed successfully!\e[0m"
 
-# Konfigurasi OhMyZsh
-echo -e "\e[32mMengkonfigurasi OhMyZsh...\e[0m"
+# Configure OhMyZsh
+echo -e "\e[32mConfiguring OhMyZsh...\e[0m"
 
-# Backup .zshrc file yang ada
+# Backup existing .zshrc file
 cp ~/.zshrc ~/.zshrc.bak
 
-# Mengubah tema default ke Powerlevel10k
+# Change default theme to Powerlevel10k
 sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' ~/.zshrc
 
-# Menambahkan plugin yang telah diinstal
+# Add installed plugins
 sed -i 's/plugins=(git)/plugins=(git zsh-syntax-highlighting zsh-autosuggestions)/' ~/.zshrc
 
-# Menambahkan konfigurasi untuk lsd
-echo -e "\e[32mMengkonfigurasi lsd...\e[0m"
+# Configure lsd
+echo -e "\e[32mConfiguring lsd...\e[0m"
 echo "alias ls='lsd'" >> ~/.zshrc
 echo "alias l='ls -l'" >> ~/.zshrc
 echo "alias la='ls -a'" >> ~/.zshrc
 echo "alias lla='ls -la'" >> ~/.zshrc
 echo "alias lt='ls --tree'" >> ~/.zshrc
 
-# Menambahkan konfigurasi untuk zoxide
-echo -e "\e[32mMengkonfigurasi Zoxide...\e[0m"
+# Configure zoxide
+echo -e "\e[32mConfiguring Zoxide...\e[0m"
 echo 'eval "$(zoxide init zsh)"' >> ~/.zshrc
 
-# Memuat ulang konfigurasi
+# Reload configuration
 if [ -n "$ZSH_VERSION" ]; then
     source ~/.zshrc
 else
-    echo -e "\e[33mPerubahan konfigurasi akan diterapkan saat Anda membuka sesi zsh baru.\e[0m"
+    echo -e "\e[33mConfiguration changes will be applied when you open a new zsh session.\e[0m"
 fi
 
-echo -e "\e[32mKonfigurasi OhMyZsh selesai!\e[0m"
-echo -e "\e[33mSilakan restart terminal atau jalankan 'source ~/.zshrc' di dalam sesi zsh untuk menerapkan perubahan, jika tidak bisa jalankan 'zsh' terlebih dahulu.\e[0m"
+echo -e "\e[32mOhMyZsh configuration complete!\e[0m"
+echo -e "\e[33mPlease restart your terminal or run 'source ~/.zshrc' in a zsh session to apply changes. If that doesn't work, run 'zsh' first.\e[0m"
