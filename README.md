@@ -50,17 +50,17 @@ Skrip ini mengotomatisasi pengaturan lingkungan terminal yang disesuaikan dengan
 ## Penggunaan
 
 1. Unduh skrip:
-
+```
    git clone https://github.com/SamVivan1/OhMyZsh_Setup.git
-
+```
 2. Buat skrip dapat dieksekusi:
-
+```
    chmod +x Setup_Terminal.sh
-
+```
 3. Jalankan skrip:
-
+```
    ./Setup_Terminal.sh
-
+```
 4. Setelah masuk ke dalam Oh My Zsh, ketik `exit` untuk keluar dari Oh My Zsh dan kembali ke instalasi.
 
 5. Setelah skrip selesai, restart terminal Anda atau jalankan `source ~/.zshrc` untuk menerapkan perubahan, jika tidak bisa jalankan `zsh` terlebih dahulu.
