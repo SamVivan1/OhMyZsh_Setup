@@ -13,20 +13,20 @@ This script automates the setup of a customized terminal environment with Oh My 
 ## Usage
 
 1. Download the script:
-
+```bash
    git clone https://github.com/SamVivan1/OhMyZsh_Setup.git
-
-2. Make the script executable:
-
+```
+2. Make the script executable
+```bash
    chmod +x Setup_Terminal.sh
-
-3. Run the script:
-
+```
+4. Run the script:
+```bash
    ./Setup_Terminal.sh
+```
+5. After entering Oh My Zsh, type `exit` to exit Oh My Zsh and return to the installation.
 
-4. After entering Oh My Zsh, type `exit` to exit Oh My Zsh and return to the installation.
-
-5. After the script finishes, restart your terminal or run `source ~/.zshrc` to apply the changes. If that doesn't work, run `zsh` first.
+6. After the script finishes, restart your terminal or run `source ~/.zshrc` to apply the changes. If that doesn't work, run `zsh` first.
 
 ## Note
 
